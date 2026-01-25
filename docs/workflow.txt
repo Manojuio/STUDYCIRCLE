@@ -1,0 +1,109 @@
+==================== STUDYCIRCLE FINAL WORKFLOW (CHART VIEW) ====================
+
+USER ENTERS PLATFORM
+│
+├── AUTH SYSTEM
+│   │
+│   ├── Register (Student/Teacher)
+│   │     └── Password hashed → User stored → JWT issued
+│   │
+│   ├── Login
+│   │     └── Credentials verified → JWT issued
+│   │
+│   └── Dashboard Access (Protected)
+│
+└── DASHBOARD (After Login)
+    │
+    ├── Shows:
+    │     ├── Groups Joined
+    │     ├── Groups Created (if student-admin)
+    │     └── Join Group Option
+    │
+    ├── Student Actions
+    │     ├── Create Group
+    │     │     └── Creator becomes Group Admin
+    │     │
+    │     └── Join Group via Join Code
+    │           └── Admin approves / auto-add
+    │
+    └── Teacher Actions
+          └── Sees only assigned groups (cannot create)
+
+================================================================================
+
+ENTER GROUP (Main Learning Hub)
+│
+├── GROUP HOME
+│   ├── Recent Resources
+│   ├── Recent Questions
+│   └── Announcements
+│
+├── RESOURCES TAB
+│   │
+│   ├── Student Uploads:
+│   │     ├── PDF
+│   │     ├── Notes
+│   │     └── Links
+│   │
+│   ├── Others Can:
+│   │     ├── View
+│   │     ├── Download
+│   │     └── Comment
+│   │
+│   └── Notification Triggered:
+│         └── "New Resource Added"
+│
+├── QUESTIONS TAB
+│   │
+│   ├── Student Posts Question
+│   │     ├── Title
+│   │     ├── Description
+│   │     └── Tags
+│   │
+│   ├── Students Answer (Peer Learning)
+│   │
+│   └── Teacher Solves (Verified Solution)
+│         └── Best Answer Marked
+│
+├── REAL-TIME CHAT TAB (WebSockets)
+│   │
+│   ├── Group Messages Live
+│   ├── Student ↔ Student
+│   └── Student ↔ Teacher
+│
+├── MEMBERS TAB
+│   │
+│   ├── Admin Can:
+│   │     ├── View Members
+│   │     ├── Add Teacher
+│   │     └── Remove Member
+│   │
+│   └── Roles Visible (Student / Teacher / Admin)
+│
+└── NOTIFICATIONS SYSTEM
+    │
+    ├── Triggered When:
+    │     ├── Resource Uploaded
+    │     ├── Question Asked
+    │     ├── Teacher Answered
+    │     └── Admin Announcement
+    │
+    └── Delivered In-App
+
+================================================================================
+
+FINAL CORE LOOP
+│
+Login
+ ↓
+Dashboard → Groups
+ ↓
+Enter Group
+ ↓
+Resources + Questions + Chat
+ ↓
+Teacher Helps + Students Collaborate
+ ↓
+Group Becomes Learning Community
+
+================================================================================
