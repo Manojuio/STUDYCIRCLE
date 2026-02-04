@@ -3,29 +3,68 @@ import Member from "../models/member.model.js";
 import User from "../models/User.js";
 import ApiError from "../utils/ApiError.js";
 
-// ✅ Create Group (student only)
+/* =========================================================
+   ✅ CREATE GROUP (Student Only)
+   ========================================================= */
+export const createGroup = async (name, description, creatorId) => {
+  // 1. Validate input
+  if (!name || !description) {
+    throw new ApiError(400, "Name and description are required");
+  }
 
-export const createGroup = async ({ name, description, creatorId}) => {
-    const creator = await Group.create({ name, description,creatorId });
-   if(!creator || creator.role !== "student")
-     throw new ApiError(403, "only students can create groups");
+  // 2. Check creator exists
+  const creator = await User.findById(creatorId);
+  if (!creator) {
+    throw new ApiError(404, "User not found");
+  }
 
-   const joinCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+  // 3. Only students can create groups
+  if (creator.role !== "student") {
+    throw new ApiError(403, "Only students can create groups");
+  }
 
-   const group = new Group({ name, description, joinCode, creatorBy: creatorId });
- await group.save();
+  // 4. Generate unique joinCode
+  let joinCode;
+  let exists = true;
 
- const addMember = new Member({ user: creatorId, group: group._id, role: "admin" });
- await addMember.save();
-group.members.push(adminMember._id);
+  while (exists) {
+    joinCode = Math.random()
+      .toString(36)
+      .substring(2, 8)
+      .toUpperCase();
+
+    const existingGroup = await Group.findOne({ joinCode });
+    if (!existingGroup) exists = false;
+  }
+
+  // 5. Create group (matches schema exactly)
+  const group = await Group.create({
+    name,
+    description,
+    joinCode,
+    createdBy: creatorId, // ✅ MUST match schema field name
+  });
+
+  // 6. Add creator as admin member
+  const adminMember = await Member.create({
+    user: creatorId,
+    group: group._id,
+    role: "admin",
+  });
+
+  // 7. Push admin into group members list
+  group.members.push(adminMember._id);
   await group.save();
 
   return group;
 };
 
-// ✅ Join Group (student only)
+/* =========================================================
+   ✅ JOIN GROUP (Student Only)
+   ========================================================= */
 export const joinGroup = async (joinCode, studentId) => {
   const student = await User.findById(studentId);
+
   if (!student || student.role !== "student") {
     throw new ApiError(403, "Only students can join groups");
   }
@@ -33,11 +72,18 @@ export const joinGroup = async (joinCode, studentId) => {
   const group = await Group.findOne({ joinCode });
   if (!group) throw new ApiError(404, "Group not found");
 
-  const existing = await Member.findOne({ group: group._id, user: studentId });
+  const existing = await Member.findOne({
+    group: group._id,
+    user: studentId,
+  });
+
   if (existing) throw new ApiError(400, "Already a member");
 
-  const member = new Member({ group: group._id, user: studentId, role: "student" });
-  await member.save();
+  const member = await Member.create({
+    group: group._id,
+    user: studentId,
+    role: "student",
+  });
 
   group.members.push(member._id);
   await group.save();
@@ -45,21 +91,38 @@ export const joinGroup = async (joinCode, studentId) => {
   return group;
 };
 
-// ✅ Add Teacher (admin only)
+/* =========================================================
+   ✅ ADD TEACHER (Admin Only)
+   ========================================================= */
 export const addTeacherToGroup = async (groupId, teacherId, adminId) => {
-  const adminMember = await Member.findOne({ group: groupId, user: adminId, role: "admin" });
-  if (!adminMember) throw new ApiError(403, "Only group admins can add teachers");
+  const adminMember = await Member.findOne({
+    group: groupId,
+    user: adminId,
+    role: "admin",
+  });
+
+  if (!adminMember) {
+    throw new ApiError(403, "Only group admins can add teachers");
+  }
 
   const teacher = await User.findById(teacherId);
+
   if (!teacher || teacher.role !== "teacher") {
     throw new ApiError(400, "User is not a teacher");
   }
 
-  const existing = await Member.findOne({ group: groupId, user: teacherId });
+  const existing = await Member.findOne({
+    group: groupId,
+    user: teacherId,
+  });
+
   if (existing) throw new ApiError(400, "Teacher already in group");
 
-  const teacherMember = new Member({ group: groupId, user: teacherId, role: "teacher" });
-  await teacherMember.save();
+  const teacherMember = await Member.create({
+    group: groupId,
+    user: teacherId,
+    role: "teacher",
+  });
 
   const group = await Group.findById(groupId);
   group.members.push(teacherMember._id);
@@ -68,23 +131,38 @@ export const addTeacherToGroup = async (groupId, teacherId, adminId) => {
   return teacherMember;
 };
 
+/* =========================================================
+   ✅ GET GROUP BY ID
+   ========================================================= */
 export const getGroupById = async (groupId) => {
-  const group = await Group.findById(groupId)
-    .populate({
-      path: "members",
-      populate: { path: "user", select: "username email role" }
-    });
+  const group = await Group.findById(groupId).populate({
+    path: "members",
+    populate: { path: "user", select: "username email role" },
+  });
+
   if (!group) throw new ApiError(404, "Group not found");
+
   return group;
 };
 
+/* =========================================================
+   ✅ LIST GROUPS FOR USER
+   ========================================================= */
 export const listGroupsForUser = async (userId) => {
   const memberships = await Member.find({ user: userId }).populate("group");
-  return memberships.map(m => m.group);
+  return memberships.map((m) => m.group);
 };
 
+/* =========================================================
+   ✅ REMOVE MEMBER (Admin Only)
+   ========================================================= */
 export const removeMember = async (groupId, memberId, adminId) => {
-  const adminMember = await Member.findOne({ group: groupId, user: adminId, role: "admin" });
+  const adminMember = await Member.findOne({
+    group: groupId,
+    user: adminId,
+    role: "admin",
+  });
+
   if (!adminMember) throw new ApiError(403, "Only admins can remove members");
 
   const member = await Member.findById(memberId);
@@ -93,14 +171,26 @@ export const removeMember = async (groupId, memberId, adminId) => {
   await Member.findByIdAndDelete(memberId);
 
   const group = await Group.findById(groupId);
-  group.members = group.members.filter(m => m.toString() !== memberId.toString());
+
+  group.members = group.members.filter(
+    (m) => m.toString() !== memberId.toString()
+  );
+
   await group.save();
 
   return group;
 };
 
+/* =========================================================
+   ✅ DELETE GROUP (Admin Only)
+   ========================================================= */
 export const deleteGroup = async (groupId, adminId) => {
-  const adminMember = await Member.findOne({ group: groupId, user: adminId, role: "admin" });
+  const adminMember = await Member.findOne({
+    group: groupId,
+    user: adminId,
+    role: "admin",
+  });
+
   if (!adminMember) throw new ApiError(403, "Only admins can delete group");
 
   await Member.deleteMany({ group: groupId });
@@ -109,10 +199,22 @@ export const deleteGroup = async (groupId, adminId) => {
   return { message: "Group deleted successfully" };
 };
 
+/* =========================================================
+   ✅ UPDATE GROUP (Admin Only)
+   ========================================================= */
 export const updateGroup = async (groupId, adminId, updates) => {
-  const adminMember = await Member.findOne({ group: groupId, user: adminId, role: "admin" });
+  const adminMember = await Member.findOne({
+    group: groupId,
+    user: adminId,
+    role: "admin",
+  });
+
   if (!adminMember) throw new ApiError(403, "Only admins can update group");
 
-  const group = await Group.findByIdAndUpdate(groupId, updates, { new: true });
+  const group = await Group.findByIdAndUpdate(groupId, updates, {
+    new: true,
+  });
+
   return group;
 };
+
