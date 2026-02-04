@@ -1,109 +1,83 @@
-==================== STUDYCIRCLE FINAL WORKFLOW (CHART VIEW) ====================
+==================== STUDYCIRCLE MVP (BACKEND-FIRST) — ALL-IN-ONE FLOW ====================
 
 USER ENTERS PLATFORM
 │
-├── AUTH SYSTEM
-│   │
-│   ├── Register (Student/Teacher)
-│   │     └── Password hashed → User stored → JWT issued
-│   │
-│   ├── Login
-│   │     └── Credentials verified → JWT issued
-│   │
-│   └── Dashboard Access (Protected)
-│
-└── DASHBOARD (After Login)
+└── AUTH SYSTEM
     │
-    ├── Shows:
-    │     ├── Groups Joined
-    │     ├── Groups Created (if student-admin)
-    │     └── Join Group Option
+    ├── Register (Student / Teacher)
+    │     └── Password hashed → User stored → JWT issued
     │
-    ├── Student Actions
-    │     ├── Create Group
-    │     │     └── Creator becomes Group Admin
-    │     │
-    │     └── Join Group via Join Code
-    │           └── Admin approves / auto-add
+    ├── Login
+    │     └── Credentials verified → JWT issued
     │
-    └── Teacher Actions
-          └── Sees only assigned groups (cannot create)
+    └── All Next Routes Protected
+          └── Token → authMiddleware → req.user set
 
-================================================================================
+========================================================================================
+
+DASHBOARD (After Login)
+│
+├── Student Actions
+│     │
+│     ├── Create Group
+│     │     ├── Group created with joinCode
+│     │     ├── createdBy = studentId
+│     │     └── Creator becomes Admin Member
+│     │
+│     └── Join Group (Join Code)
+│           ├── Group found by joinCode
+│           └── Student added as Member
+
+└── Teacher Actions
+      └── Can participate only in groups where added
+
+========================================================================================
 
 ENTER GROUP (Main Learning Hub)
 │
-├── GROUP HOME
-│   ├── Recent Resources
-│   ├── Recent Questions
-│   └── Announcements
+├── Membership Gate (Core Rule)
+│     └── Only group members can access anything inside
 │
-├── RESOURCES TAB
-│   │
-│   ├── Student Uploads:
-│   │     ├── PDF
-│   │     ├── Notes
-│   │     └── Links
-│   │
-│   ├── Others Can:
-│   │     ├── View
-│   │     ├── Download
-│   │     └── Comment
-│   │
-│   └── Notification Triggered:
-│         └── "New Resource Added"
-│
-├── QUESTIONS TAB
-│   │
-│   ├── Student Posts Question
-│   │     ├── Title
-│   │     ├── Description
-│   │     └── Tags
-│   │
-│   ├── Students Answer (Peer Learning)
-│   │
-│   └── Teacher Solves (Verified Solution)
-│         └── Best Answer Marked
-│
-├── REAL-TIME CHAT TAB (WebSockets)
-│   │
-│   ├── Group Messages Live
-│   ├── Student ↔ Student
-│   └── Student ↔ Teacher
-│
-├── MEMBERS TAB
-│   │
-│   ├── Admin Can:
-│   │     ├── View Members
-│   │     ├── Add Teacher
-│   │     └── Remove Member
-│   │
-│   └── Roles Visible (Student / Teacher / Admin)
-│
-└── NOTIFICATIONS SYSTEM
-    │
-    ├── Triggered When:
-    │     ├── Resource Uploaded
-    │     ├── Question Asked
-    │     ├── Teacher Answered
-    │     └── Admin Announcement
-    │
-    └── Delivered In-App
+├── RESOURCES MODULE (PDF / Links)
+│     │
+│     ├── Upload Resource
+│     │     ├── Member check passes
+│     │     ├── PDF stored in /uploads/resources
+│     │     └── Resource saved in MongoDB
+│     │
+│     ├── View Resources
+│     │     └── All members can list + download
+│     │
+│     └── Delete Resource
+│           └── Only uploader (or admin)
 
-================================================================================
+├── QUESTIONS + ANSWERS MODULE (Doubts System)
+│     │
+│     ├── Student Posts Question
+│     │     ├── Title + Description stored
+│     │     └── Visible to all group members
+│     │
+│     ├── Students Answer (Peer Learning)
+│     │
+│     └── Teacher Answers (Verified Clarification)
 
-FINAL CORE LOOP
+========================================================================================
+
+FINAL MVP CORE LOOP
 │
-Login
+Login/Register
  ↓
-Dashboard → Groups
+Student Creates or Joins Group
  ↓
-Enter Group
+Enter Group (Members Only)
  ↓
-Resources + Questions + Chat
+Share Resources + Ask Doubts
  ↓
-Teacher Helps + Students Collaborate
+Teacher Clarifies + Students Collaborate
  ↓
-Group Becomes Learning Community
+StudyCircle becomes a Learning Community
 
-================================================================================
+========================================================================================
+
+
+========================================================================================
