@@ -262,15 +262,6 @@ Copy code
 
 ---
 
-## Next Step
-
-If you want, I can also add:
-
-- Screenshots section  
-- Deployment guide  
-- API documentation (Swagger)
-
-Reply: **Add deployment + screenshots**
 
 
 
