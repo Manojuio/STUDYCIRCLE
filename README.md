@@ -1,270 +1,286 @@
- 📚 StudyCircle — Student Group Learning Platform
+# 📚 StudyCircle — Student Group Learning Platform
 
-StudyCircle is a full-stack student-centered learning platform where students can create or join study groups, share resources, ask doubts, and get verified answers from teachers.
+A full-stack learning platform where students collaborate in study groups, share resources, ask doubts, and receive verified answers from teachers.
 
-This project is built to cover core backend + frontend concepts under one roof, including authentication, role-based access, group management, Q&A system, and scalable API structure.
-
----
-
-# 🚀 Project Idea
-
-Students often struggle with:
-
-- Finding a focused study community  
-- Sharing resources in one place  
-- Getting doubts clarified by teachers  
-- Maintaining group-based learning  
-
-StudyCircle solves this by providing:
-
-✅ Group-based learning hub  
-✅ Resource sharing  
-✅ Doubt asking + teacher answering  
-✅ Role-based permissions  
+Built to demonstrate real-world backend architecture, authentication, role-based access control, and scalable API design.
 
 ---
 
-# ✨ Features Implemented
+## 🚀 Overview
 
-## 🔐 Authentication (JWT)
+Students often face challenges such as:
 
-- Register as Student or Teacher  
-- Secure login with hashed passwords  
-- JWT token-based protected routes  
-- Role stored inside token  
+* Finding focused study communities
+* Organizing study materials
+* Getting doubts resolved quickly
+* Collaborating effectively with peers
 
----
-
-## 👥 Groups System
-
-- Students can create groups  
-- Join groups using unique join codes  
-- Group creator becomes Admin  
-- Teachers can be added to groups  
+**StudyCircle** provides a centralized platform to solve these problems through group-based learning and teacher-guided discussions.
 
 ---
 
-## 📌 Resources Module (Links Only)
+## ✨ Key Features
 
-- Students can share study resources as links  
-- Resources are group-specific  
-- View all shared resources in group  
+### 🔐 Authentication & Authorization
 
-Endpoints:
+* JWT-based authentication
+* Secure password hashing
+* Student and Teacher roles
+* Protected API routes
+* Role-based access control
 
-- Add resource  
-- List resources  
-- Delete resource  
+### 👥 Study Groups
 
----
+* Create study groups
+* Join groups using unique join codes
+* Group creator automatically becomes Admin
+* Add teachers to groups
+* Manage group members
 
-## ❓ Questions & Doubts Module
+### 📚 Resource Sharing
 
-- Students can post questions inside groups  
-- All members can view questions  
-- Questions have title + description  
+* Share study resources via links
+* Group-specific resource management
+* View all shared resources within a group
+* Delete resources when needed
 
-Endpoints:
+### ❓ Doubt Discussion System
 
-- Ask question  
-- List questions  
-- Delete question  
+* Students can ask questions
+* Group members can view discussions
+* Structured question format:
 
----
+  * Title
+  * Description
 
-## ✅ Teacher Answer System (Verified)
+### ✅ Verified Teacher Answers
 
-- Only teachers can answer questions  
-- Students cannot answer  
-- Answers are shown as verified teacher replies  
+* Only teachers can answer questions
+* Answers marked as verified
+* Dedicated answer threads
+* Teacher-only answer interface
 
-Includes:
+### 👤 Member Management
 
-- Question Detail Page  
-- Answer thread display  
-- Teacher-only answer input box  
+Supported roles:
 
----
+* Student
+* Teacher
+* Admin
 
-## 👤 Members Management
+Admins can:
 
-- Group members stored in Member model  
-- Admin can remove members  
-- Roles supported:
-
-- Student  
-- Teacher  
-- Admin  
-
----
-
-# 🛠 Tech Stack
-
-## Backend
-
-- Node.js  
-- Express.js  
-- MongoDB + Mongoose  
-- JWT Authentication  
-- MVC + Service Architecture  
-
-## Frontend
-
-- React (Vite)  
-- React Router DOM  
-- Axios (central API layer)  
-- Role-based UI rendering  
+* View members
+* Remove members
+* Manage group participation
 
 ---
 
-# 📂 Project Structure
+## 🛠 Tech Stack
 
+### Backend
+
+* Node.js
+* Express.js
+* MongoDB
+* Mongoose
+* JWT Authentication
+* MVC Architecture
+* Service Layer Pattern
+
+### Frontend
+
+* React (Vite)
+* React Router DOM
+* Axios
+* Context API
+* Role-Based UI Rendering
+
+---
+
+## 📂 Project Structure
+
+```bash
 STUDYCIRCLE/
 │
 ├── backend/
-│ ├── src/
-│ │ ├── config/
-│ │ ├── controllers/
-│ │ ├── middlewares/
-│ │ ├── models/
-│ │ ├── routes/
-│ │ ├── services/
-│ │ └── utils/
-│ │
-│ └── uploads/
+│   ├── src/
+│   │   ├── config/
+│   │   ├── controllers/
+│   │   ├── middlewares/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   └── utils/
+│   │
+│   └── uploads/
 │
 ├── frontend/
-│ ├── src/
-│ │ ├── api/
-│ │ ├── pages/
-│ │ ├── styles/
-│ │ └── App.jsx
+│   ├── src/
+│   │   ├── api/
+│   │   ├── pages/
+│   │   ├── styles/
+│   │   └── App.jsx
 │
 └── README.md
-
-yaml
-Copy code
+```
 
 ---
 
-# 🔥 Complete Workflow
+## 🔄 Application Workflow
 
-## 1. User Registers / Logs In
+### 1️⃣ Authentication
 
-- JWT token issued  
-- Stored in frontend localStorage  
+Users can:
 
----
-
-## 2. Dashboard (After Login)
-
-User can:
-
-- View joined groups  
-- Create new group (students only)  
-- Join group via joinCode  
+* Register as Student or Teacher
+* Login securely
+* Receive JWT token
+* Access protected features
 
 ---
 
-## 3. Enter Group Hub
+### 2️⃣ Dashboard
 
-Inside group:
+After login users can:
 
-- Resources section  
-- Questions section  
-- Teacher Answers section  
-- Members list  
-
----
-
-## 4. Doubt Solving Loop
-
-Student asks → Teacher answers → Verified response shown
+* View joined groups
+* Create new groups
+* Join existing groups using join codes
 
 ---
 
-# ⚙️ Setup Instructions
+### 3️⃣ Group Hub
 
-## 1. Clone Repository
+Each group contains:
+
+* Resources
+* Questions
+* Teacher Answers
+* Members List
+
+---
+
+### 4️⃣ Doubt Resolution Flow
+
+```text
+Student asks question
+        ↓
+Teacher reviews question
+        ↓
+Teacher posts verified answer
+        ↓
+Students learn and discuss
+```
+
+---
+
+## 🔑 API Modules
+
+| Module    | Endpoints                                     |
+| --------- | --------------------------------------------- |
+| Auth      | Register, Login, Me                           |
+| Groups    | Create, Join, List, Delete                    |
+| Resources | Add Resource, List Resources, Delete Resource |
+| Questions | Ask Question, List Questions, Delete Question |
+| Answers   | Teacher Answer, List Answers                  |
+| Members   | List Members, Remove Member                   |
+
+---
+
+## ⚙️ Installation & Setup
+
+### Clone Repository
 
 ```bash
 git clone https://github.com/Manojuio/STUDYCIRCLE.git
 cd STUDYCIRCLE
-2. Backend Setup
-bash
-Copy code
+```
+
+### Backend Setup
+
+```bash
 cd backend
 npm install
 npm run dev
-Backend runs on:
+```
 
-arduino
-Copy code
+Server runs on:
+
+```bash
 http://localhost:5000
-3. Frontend Setup
-Open new terminal:
+```
 
-bash
-Copy code
+### Frontend Setup
+
+Open a new terminal:
+
+```bash
 cd frontend
 npm install
 npm run dev
+```
+
 Frontend runs on:
 
-arduino
-Copy code
+```bash
 http://localhost:5173
-🔑 API Modules Summary
-Module	Key Endpoints
-Auth	Register, Login, Me
-Groups	Create, Join, List, Delete
-Resources	Add Link, List, Delete
-Questions	Ask, List, Delete
-Answers	Teacher Only Answer + List
-Members	List Members, Remove Member
-
-📌 Future Improvements (Phase 2)
-Planned features:
-
-WebSocket Group Chat
-
-Notifications system
-
-File uploads (PDF Notes)
-
-Deployment (Render + Vercel)
-
-Search + Filters
-
-Pagination for questions
-
-🎯 Why This Project Matters
-StudyCircle demonstrates:
-
-✅ Real-world backend architecture
-✅ Role-based authorization
-✅ Full-stack integration
-✅ Scalable API design
-✅ Internship-level project complexity
-
-👨‍💻 Author
-Manoj Kumar
-2nd Year Computer Science Student
-Building full-stack + AI-integrated projects
-
-GitHub: https://github.com/Manojuio
-
-⭐ If you like this project
-Give it a star ⭐ on GitHub and follow for more projects!
-
-yaml
-Copy code
+```
 
 ---
 
+## 📈 Future Enhancements
 
+Planned for Phase 2:
 
+* Real-Time Group Chat (WebSockets)
+* Notification System
+* PDF/File Upload Support
+* Search & Filtering
+* Pagination
+* Activity Tracking
+* Group Analytics
+* Deployment (Render + Vercel)
+* Email Notifications
 
+---
 
+## 🎯 Learning Outcomes
 
+This project demonstrates:
 
+* REST API Development
+* Authentication & Authorization
+* Role-Based Access Control
+* MongoDB Data Modeling
+* MVC + Service Architecture
+* Frontend & Backend Integration
+* Scalable Project Structure
+* Real-World Software Design
+
+---
+
+## 👨‍💻 Author
+
+**Manoj Kumar**
+
+Computer Science Student | Backend Development Enthusiast | AI & System Design Learner
+
+GitHub: https://github.com/Manojuio
+
+LinkedIn: https://www.linkedin.com/in/manoj-kumar-632b26231
+
+---
+
+## ⭐ Support
+
+If you found this project useful:
+
+* Star the repository ⭐
+* Fork the project 🍴
+* Share feedback 💡
+* Contribute improvements 🚀
+
+---
+
+### Building projects. Learning systems. Growing every day.
