@@ -1,49 +1,91 @@
-# File Tree: studycircle
+# File Tree: Developer
 
-**Generated:** 1/30/2026, 9:04:17 PM
-**Root Path:** `c:\Users\undra\OneDrive\studycircle`
+**Generated:** 6/19/2026, 5:22:24 PM
+**Root Path:** `c:\Users\undra\OneDrive\Developer`
 
 ```
-├── 📁 backend
-│   ├── 📁 src
-│   │   ├── 📁 config
-│   │   │   ├── 📄 db.js
-│   │   │   └── 📄 env.js
-│   │   ├── 📁 controllers
-│   │   │   ├── 📄 auth.controller.js
-│   │   │   ├── 📄 group.controller.js
-│   │   │   └── 📄 resource.controller.js
-│   │   ├── 📁 middlewares
-│   │   │   ├── 📄 auth.middleware.js
-│   │   │   ├── 📄 error.middleware.js
-│   │   │   ├── 📄 upload.middleware.js
-│   │   │   └── 📄 validate.middleware.js
-│   │   ├── 📁 models
-│   │   │   ├── 📄 User.js
-│   │   │   ├── 📄 group.model.js
-│   │   │   ├── 📄 member.model.js
-│   │   │   └── 📄 resource.model.js
-│   │   ├── 📁 routes
-│   │   │   ├── 📄 auth.routes.js
-│   │   │   ├── 📄 group.routes.js
-│   │   │   └── 📄 resource.routes.js
-│   │   ├── 📁 services
-│   │   │   ├── 📄 auth.service.js
-│   │   │   ├── 📄 group.service.js
-│   │   │   └── 📄 resource.service.js
-│   │   ├── 📁 utils
-│   │   │   ├── 📄 ApiError.js
-│   │   │   ├── 📄 ApiResponse.js
-│   │   │   └── 📄 logger.js
-│   │   ├── 📄 app.js
-│   │   └── 📄 server.js
-│   ├── 📁 uploads
-│   │   └── 📁 resources
-│   ├── ⚙️ package-lock.json
-│   └── ⚙️ package.json
-├── 📁 docs
-│   └── 📄 workflow.txt
-└── ⚙️ .gitignore
+├── STUDYCIRCLE
+│   ├── backend
+│   │   ├── src
+│   │   │   ├── config
+│   │   │   │   ├── db.js
+│   │   │   │   └── env.js
+│   │   │   ├── controllers
+│   │   │   │   ├── answer.controller.js
+│   │   │   │   ├── auth.controller.js
+│   │   │   │   ├── group.controller.js
+│   │   │   │   ├── question.controller.js
+│   │   │   │   └── resource.controller.js
+│   │   │   ├── middlewares
+│   │   │   │   ├── auth.middleware.js
+│   │   │   │   ├── error.middleware.js
+│   │   │   │   └── validate.middleware.js
+│   │   │   ├── models
+│   │   │   │   ├── User.js
+│   │   │   │   ├── answer.model.js
+│   │   │   │   ├── group.model.js
+│   │   │   │   ├── member.model.js
+│   │   │   │   ├── question.model.js
+│   │   │   │   └── resource.model.js
+│   │   │   ├── routes
+│   │   │   │   ├── auth.routes.js
+│   │   │   │   ├── group.routes.js
+│   │   │   │   ├── question.routes.js
+│   │   │   │   └── resource.routes.js
+│   │   │   ├── services
+│   │   │   │   ├── answer.service.js
+│   │   │   │   ├── auth.service.js
+│   │   │   │   ├── group.service.js
+│   │   │   │   ├── question.service.js
+│   │   │   │   └── resource.service.js
+│   │   │   ├── utils
+│   │   │   │   ├── ApiError.js
+│   │   │   │   ├── ApiResponse.js
+│   │   │   │   └── logger.js
+│   │   │   ├── app.js
+│   │   │   └── server.js
+│   │   ├── package-lock.json
+│   │   └── package.json
+│   ├── docs
+│   │   ├── tree.md
+│   │   └── workflow.txt
+│   ├── frontend
+│   │   ├── src
+│   │   │   ├── api
+│   │   │   │   ├── answers.js
+│   │   │   │   ├── auth.js
+│   │   │   │   ├── axios.js
+│   │   │   │   ├── groupDetail.js
+│   │   │   │   ├── groups.js
+│   │   │   │   ├── questions.js
+│   │   │   │   ├── resources.js
+│   │   │   │   └── user.js
+│   │   │   ├── pages
+│   │   │   │   ├── AdminDashboard.jsx
+│   │   │   │   ├── Dashboard.jsx
+│   │   │   │   ├── Group.jsx
+│   │   │   │   ├── Login.jsx
+│   │   │   │   ├── QuestionDetail.jsx
+│   │   │   │   ├── Register.jsx
+│   │   │   │   └── TeacherDashboard.jsx
+│   │   │   ├── styles
+│   │   │   │   ├── admin.css
+│   │   │   │   ├── auth.css
+│   │   │   │   ├── dashboard.css
+│   │   │   │   ├── ui-components.css
+│   │   │   │   └── ui.css
+│   │   │   ├── App.jsx
+│   │   │   └── main.jsx
+│   │   ├── .gitignore
+│   │   ├── README.md
+│   │   ├── eslint.config.js
+│   │   ├── index.html
+│   │   ├── package-lock.json
+│   │   ├── package.json
+│   │   └── vite.config.js
+│   ├── .gitignore
+│   └── README.md
+└── package-lock.json
 ```
 
 ---
