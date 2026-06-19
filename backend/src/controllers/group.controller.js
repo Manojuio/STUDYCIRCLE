@@ -1,12 +1,14 @@
 import {
   createGroup,
   joinGroup,
-  addTeacherToGroup,
+  requestTeacherJoin,
+  approveTeacherJoin,
   getGroupById,
   listGroupsForUser,
+  pendingTeacherRequests,
   removeMember,
   deleteGroup,
-  updateGroup
+  updateGroup,
 } from "../services/group.service.js";
 
 import ApiResponse from "../utils/ApiResponse.js";
@@ -65,21 +67,52 @@ export const join = async (req, res, next) => {
 };
 
 // ==============================
-// ADD TEACHER
+// TEACHER REQUEST JOIN (Teacher only)
 // ==============================
-export const addTeacher = async (req, res, next) => {
+export const requestTeacher = async (req, res, next) => {
   try {
-    const { groupId, teacherId } = req.body;
+    const { joinCode } = req.body;
 
-    const teacherMember = await addTeacherToGroup(
-      groupId,
-      teacherId,
-      req.user.id
-    );
+    const request = await requestTeacherJoin(joinCode, req.user.id);
 
     res
       .status(201)
-      .json(new ApiResponse(201, teacherMember, "Teacher added"));
+      .json(new ApiResponse(201, request, "Teacher join request sent"));
+  } catch (err) {
+    next(err);
+  }
+};
+
+// ==============================
+// APPROVE TEACHER (Admin only)
+// ==============================
+export const approveTeacher = async (req, res, next) => {
+  try {
+    const { groupId, teacherId, approve } = req.body;
+
+    const result = await approveTeacherJoin(
+      groupId,
+      teacherId,
+      req.user.id,
+      approve
+    );
+
+    res
+      .status(200)
+      .json(new ApiResponse(200, result, "Teacher request updated"));
+  } catch (err) {
+    next(err);
+  }
+};
+
+// ==============================
+// PENDING TEACHER REQUESTS (Admin only)
+// ==============================
+export const pendingTeachers = async (req, res, next) => {
+  try {
+    const result = await pendingTeacherRequests(req.user.id);
+
+    res.status(200).json(new ApiResponse(200, result, "Pending teacher requests"));
   } catch (err) {
     next(err);
   }

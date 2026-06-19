@@ -1,45 +1,18 @@
-.dashboard-container {
+.dashboard-container { /* legacy - migrated to ui.css */
   max-width: 700px;
   margin: 50px auto;
   font-family: Arial, sans-serif;
 }
 
-.dashboard-container h2 {
-  text-align: center;
-}
+.dashboard-container h2 { text-align: center; }
 
-.card {
-  border: 1px solid #ddd;
-  padding: 15px;
-  border-radius: 8px;
-  margin-top: 15px;
-  background: #fff;
-}
-
-.card input {
-  width: 100%;
-  padding: 8px;
-  margin: 6px 0;
-  border: 1px solid #bbb;
-  border-radius: 6px;
-}
-
-.card button {
-  padding: 8px 12px;
-  border: none;
-  background: black;
-  color: white;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.card button:hover {
-  background: #333;
-}
+/* Keep legacy selectors minimal to avoid clashing with ui.css */
+.card { border-radius: var(--radius-xl); }
 
 .group-box {
-  border: 1px solid gray;
-  padding: 10px;
-  border-radius: 6px;
-  margin-top: 10px;
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  padding: 12px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.82);
 }
+

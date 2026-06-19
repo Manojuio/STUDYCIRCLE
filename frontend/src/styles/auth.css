@@ -1,55 +1,70 @@
 .auth-container {
   width: 100%;
-  max-width: 400px;
-  margin: 80px auto;
-  padding: 25px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  font-family: Arial, sans-serif;
-  background: #fff;
+  max-width: 420px;
+  margin: 70px auto;
+  padding: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 22px;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 18px 45px rgba(2, 6, 23, 0.18);
+  color: rgba(255, 255, 255, 0.92);
 }
+
 
 .auth-container h2 {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+  font-size: 18px;
+  letter-spacing: -0.02em;
 }
 
 .auth-container input,
 .auth-container select {
   width: 100%;
-  padding: 10px;
-  margin: 8px 0;
-  border: 1px solid #bbb;
-  border-radius: 6px;
+  padding: 11px 12px;
+  margin: 10px 0;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 12px;
   font-size: 14px;
+  background: rgba(255, 255, 255, 0.92);
+  color: rgba(15, 23, 42, 0.95);
 }
+
 
 .auth-container button {
   width: 100%;
-  padding: 10px;
+  padding: 11px 14px;
   margin-top: 12px;
-  border: none;
-  border-radius: 6px;
-  background: black;
-  color: white;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--primary), var(--primary2));
+  color: #fff;
   font-size: 15px;
+  font-weight: 800;
   cursor: pointer;
+  box-shadow: 0 10px 22px rgba(79, 70, 229, 0.25);
 }
 
 .auth-container button:hover {
-  background: #333;
+  filter: brightness(1.05);
 }
+
 
 .auth-container p {
   text-align: center;
-  margin-top: 15px;
+  margin-top: 16px;
+  color: rgba(255, 255, 255, 0.75);
 }
 
 .auth-container a {
-  color: blue;
-  text-decoration: none;
+  color: rgba(255, 255, 255, 0.95);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
 }
 
 .auth-container a:hover {
-  text-decoration: underline;
+  color: #fff;
 }
+

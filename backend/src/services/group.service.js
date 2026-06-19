@@ -3,10 +3,15 @@ import Member from "../models/member.model.js";
 import User from "../models/User.js";
 import ApiError from "../utils/ApiError.js";
 
+const getJoinRequestTeacherMember = async (groupId, teacherId) => {
+  return Member.findOne({ group: groupId, user: teacherId, role: "teacher" });
+};
+
 /* =========================================================
    ✅ CREATE GROUP (Student Only)
    ========================================================= */
 export const createGroup = async (name, description, creatorId) => {
+
   // 1. Validate input
   if (!name || !description) {
     throw new ApiError(400, "Name and description are required");
@@ -92,9 +97,53 @@ export const joinGroup = async (joinCode, studentId) => {
 };
 
 /* =========================================================
-   ✅ ADD TEACHER (Admin Only)
+   ✅ TEACHER REQUEST JOIN (Teacher Only)
    ========================================================= */
-export const addTeacherToGroup = async (groupId, teacherId, adminId) => {
+export const requestTeacherJoin = async (joinCode, teacherId) => {
+  const teacher = await User.findById(teacherId);
+
+  if (!teacher || teacher.role !== "teacher") {
+    throw new ApiError(403, "Only teacher users can request to join");
+  }
+
+  if (!joinCode) throw new ApiError(400, "Join code is required");
+
+  const group = await Group.findOne({ joinCode });
+  if (!group) throw new ApiError(404, "Group not found");
+
+  const existingMember = await Member.findOne({
+    group: group._id,
+    user: teacherId,
+    role: "teacher",
+  });
+
+  if (existingMember) {
+    if (existingMember.joinStatus === "approved") {
+      throw new ApiError(400, "Teacher already approved in this group");
+    }
+    if (existingMember.joinStatus === "pending") {
+      throw new ApiError(400, "Teacher request already pending");
+    }
+  }
+
+  // Create pending teacher member
+  const teacherMember = await Member.create({
+    group: group._id,
+    user: teacherId,
+    role: "teacher",
+    joinStatus: "pending",
+  });
+
+  group.members.push(teacherMember._id);
+  await group.save();
+
+  return teacherMember;
+};
+
+/* =========================================================
+   ✅ APPROVE/REJECT TEACHER REQUEST (Admin Only)
+   ========================================================= */
+export const approveTeacherJoin = async (groupId, teacherId, adminId, approve) => {
   const adminMember = await Member.findOne({
     group: groupId,
     user: adminId,
@@ -102,33 +151,64 @@ export const addTeacherToGroup = async (groupId, teacherId, adminId) => {
   });
 
   if (!adminMember) {
-    throw new ApiError(403, "Only group admins can add teachers");
+    throw new ApiError(403, "Only group admins can approve teachers");
   }
 
-  const teacher = await User.findById(teacherId);
-
-  if (!teacher || teacher.role !== "teacher") {
-    throw new ApiError(400, "User is not a teacher");
+  const teacherMember = await getJoinRequestTeacherMember(groupId, teacherId);
+  if (!teacherMember) {
+    throw new ApiError(404, "Teacher join request not found");
   }
 
-  const existing = await Member.findOne({
-    group: groupId,
-    user: teacherId,
-  });
+  if (teacherMember.joinStatus !== "pending") {
+    throw new ApiError(400, `Teacher request is already ${teacherMember.joinStatus}`);
+  }
 
-  if (existing) throw new ApiError(400, "Teacher already in group");
+  if (approve) {
+    teacherMember.joinStatus = "approved";
+    await teacherMember.save();
 
-  const teacherMember = await Member.create({
-    group: groupId,
-    user: teacherId,
-    role: "teacher",
-  });
+    return teacherMember;
+  }
+
+  // reject => remove member doc from group.members and delete member
+  await Member.findByIdAndDelete(teacherMember._id);
 
   const group = await Group.findById(groupId);
-  group.members.push(teacherMember._id);
+  group.members = group.members.filter(
+    (m) => m.toString() !== teacherMember._id.toString()
+  );
   await group.save();
 
-  return teacherMember;
+  return { message: "Teacher request rejected" };
+};
+
+/* =========================================================
+   ✅ PENDING TEACHER REQUESTS (Admin Only)
+   ========================================================= */
+export const pendingTeacherRequests = async (adminId) => {
+  // find groups where adminId is admin
+  const adminMemberships = await Member.find({
+    user: adminId,
+    role: "admin",
+  }).select("group");
+
+  const groupIds = adminMemberships.map((m) => m.group);
+  if (groupIds.length === 0) return [];
+
+  const pending = await Member.find({
+    group: { $in: groupIds },
+    role: "teacher",
+    joinStatus: "pending",
+  }).populate("user", "username email role").populate("group", "name description joinCode");
+
+  return pending.map((m) => ({
+    memberId: m._id,
+    teacherId: m.user._id,
+    teacher: m.user,
+    group: m.group,
+    joinStatus: m.joinStatus,
+    requestedAt: m.createdAt,
+  }));
 };
 
 /* =========================================================
@@ -138,6 +218,7 @@ export const getGroupById = async (groupId) => {
   const group = await Group.findById(groupId).populate({
     path: "members",
     populate: { path: "user", select: "username email role" },
+    match: { joinStatus: "approved" },
   });
 
   if (!group) throw new ApiError(404, "Group not found");
@@ -149,8 +230,16 @@ export const getGroupById = async (groupId) => {
    ✅ LIST GROUPS FOR USER
    ========================================================= */
 export const listGroupsForUser = async (userId) => {
-  const memberships = await Member.find({ user: userId }).populate("group");
-  return memberships.map((m) => m.group);
+  const memberships = await Member.find({
+    user: userId,
+  }).populate("group");
+
+  return memberships
+    .filter((m) => {
+      if (m.role === "teacher") return m.joinStatus === "approved";
+      return true;
+    })
+    .map((m) => m.group);
 };
 
 /* =========================================================

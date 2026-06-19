@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import AdminDashboard from "./pages/AdminDashboard";
+import TeacherDashboard from "./pages/TeacherDashboard";
 import Group from "./pages/Group";
 import QuestionDetail from "./pages/QuestionDetail";
 
@@ -16,6 +18,8 @@ export default function App() {
 
         {/* Dashboard */}
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/teacher" element={<TeacherDashboard />} />
 
         {/* Group Page */}
         <Route path="/group/:groupId" element={<Group />} />
@@ -25,3 +29,4 @@ export default function App() {
     </BrowserRouter>
   );
 }
+
