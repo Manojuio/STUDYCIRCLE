@@ -9,17 +9,25 @@ import questionRoutes from "./routes/question.routes.js";
 
 const app = express();
 
-app.use(cors());
+// Secure CORS configuration for production
+app.use(cors({
+  origin: [
+    "http://localhost:5173", // Local Vite development server
+    /\.vercel\.app$/        // Matches any deployment preview or production domain on Vercel
+  ],
+  credentials: true          // Allows session cookies/headers if you use them now or in the future
+}));
+
 app.use(express.json());
 app.use(morgan("dev"));
 
+// API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/groups", groupRoutes);
 app.use("/api/groups", resourceRoutes);
 app.use("/api/groups", questionRoutes);
 
-
-
+// Global Error Handler
 app.use(errorMiddleware);
 
 export default app;
